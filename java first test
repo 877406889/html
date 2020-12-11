@@ -1,0 +1,82 @@
+package test;//猜字符小游戏随机输出字符也可以做成验证码
+import java.util.Scanner;
+public class Guess {
+	public static void main(String[] args) {
+		char char5[]=new char[5];
+		char input[]=new char[5];
+		int result[]=new int[2];
+		generate(char5);
+		Scanner scan =new Scanner(System.in);
+		System.out.println(char5);
+		System.out.println("请输入你的答案");
+		int score=0;
+		while(true)
+		{
+			String c=scan.next().toLowerCase();//.toLowerCase将用户输入的字符自动转化为小写
+			if(c.equals("exit"))//equals只用于字符串的判断不能用==				//防止区分大小写如同验证码一样
+			{
+				System.out.println("欢迎下次再来");
+				System.out.print("答案为");
+				System.out.println(char5);
+				break;
+			}
+			input=c.toCharArray();//将用户输入的字符串转化为一个字符数组
+			result=check(char5,input);
+			System.out.println("请输入你的答案（五个小写字母）");
+			if(result[1]==5)
+			{
+				score=(100*char5.length-score*10);
+				System.out.println("您的得分为"+score+"分");
+				break;
+			}
+			else
+			{
+				score++;
+				System.out.println("您猜对了"+result[0]+"个字符,猜对了"+result[1]+"个位置");
+				System.out.println("请再次输入你的答案");
+			}
+		}
+		
+	}
+	
+	
+public static char[] generate(char char5[])//随机生成五个字符
+{
+	char chars[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p'
+			,'q','r','s','t','u','v','w','x','y','z'};
+	boolean flags[]=new boolean[chars.length];//防止发生重复给数组每个位置加个开关如果为false则输
+	//出这字符ture则表示重复
+	for(int i=0;i<5;i++)
+	{
+		int index;
+		do{//防止重复
+		index=(int)(Math.random()*chars.length);
+		}while(flags[index]==true);
+		char5[i]=chars[index];
+		flags[index]=true;
+	}
+	return char5;
+}
+
+
+public static int[] check(char char5[],char input[])
+{
+	int result[]=new int[2];//因为要输出两个所以要用一个int的数组
+	for(int i=0;i<5;i++)
+	{
+		for(int j=0;j<5;j++)
+		{
+			if(input[j]==char5[i])
+			{
+				result[0]++;
+				if(i==j)
+				{
+					result[1]++;
+				}
+				if (i==j) break;
+			}
+		}
+	}
+	return result;
+}
+}
